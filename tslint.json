@@ -1,0 +1,25 @@
+{
+  "extends": ["tslint:latest", "tslint-config-prettier", "tslint-immutable"],
+  "linterOptions": {
+    "exclude": [
+      "**/*.test.ts",
+      "**/*.spec.ts"
+    ]
+  },
+  "rules": {
+    "interface-name": [true, "never-prefix"],
+    "no-implicit-dependencies": [true, "dev"],
+
+    "no-var-keyword": true,
+    "no-parameter-reassignment": true,
+    "typedef": [true, "call-signature"],
+    "no-submodule-imports": false,
+    "no-delete": false,
+    "no-method-signature": true,
+    "no-mixed-interface": true,
+    "no-this-assignment": false,
+    "no-console": false,
+    "object-literal-sort-keys": false,
+    "interface-over-type-literal": false
+  }
+}
