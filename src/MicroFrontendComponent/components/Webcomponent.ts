@@ -32,7 +32,7 @@ export class MicroFrontendWebComponent implements IMicroFrontendComponent {
     this.dataProperty = null;
     this.cb = get(options, 'eventCallback', () => {});
 
-    // define a "microFrontEndDataBridge" propety on the webcomponent HTMLElement that will trigger handling of events.
+    // define a custom propety on the webcomponent HTMLElement that will trigger handling of events.
     const self = this;
     Object.defineProperty(this.customElement, CUSTOM_ELEMENT_DATA_PROPERTY, {
       get: () => self.dataProperty,

@@ -14,7 +14,7 @@ export class MicroFrontendIframe implements IMicroFrontendComponent {
   constructor(options: ConstructorOptions) {
     const parentOriginMapping = get(options, 'parentOriginMapping');
     this.parentOrigin = get(parentOriginMapping, [getQueryString('environment')]);
-    this.validateIframeParentOrigin = this.parentOrigin && get(options, 'validateIframeParentOrigin', false);
+    this.validateIframeParentOrigin = this.parentOrigin && get(options, 'validateIframeParentOrigin', true);
 
     this.cb = get(options, 'eventCallback', () => {});
     window.addEventListener('message', (e: MessageEvent & { detail?: any }) => this.handleIframeParentMessage(e), false);
@@ -22,11 +22,11 @@ export class MicroFrontendIframe implements IMicroFrontendComponent {
 
   send(eventId: string, event: string, payload: any) {
     const sentObject = { eventId, event, payload };
-    window.parent.postMessage(sentObject, this.validateIframeParentOrigin ? '*' : this.parentOrigin);
+    window.parent.postMessage(sentObject, this.validateIframeParentOrigin ? this.parentOrigin : '*');
   }
 
   private handleIframeParentMessage(e: MessageEvent & { detail?: any }): void {
-    if (!this.validateIframeParentOrigin && (!e.origin || e.origin !== this.parentOrigin)) {
+    if (this.validateIframeParentOrigin && (!e.origin || e.origin !== this.parentOrigin)) {
       return;
     }
 
@@ -39,5 +39,4 @@ export class MicroFrontendIframe implements IMicroFrontendComponent {
 
     this.cb(data);
   }
-
 }

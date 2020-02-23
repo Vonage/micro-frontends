@@ -1,13 +1,17 @@
 {
   "name": "@vonage/micro-frontends",
-  "version": "0.1.0-alpha",
+  "version": "0.1.0-alpha.2",
   "description": "A simple solution for Micro Frontends orchestration",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
   "module": "build/module/index.js",
-  "repository": "",
+  "repository": "https://github.com/Vonage/micro-frontends",
   "license": "MIT",
-  "keywords": [],
+  "keywords": ["micro-frontends", "orchestration", "spa", "iframe", "web components"],
+  "author": {
+    "name": "Roee Malis",
+    "email": "roee.malis@vonage.com"
+  },
   "scripts": {
     "describe": "npm-scripts-info",
     "build": "run-s clean && run-p build:*",

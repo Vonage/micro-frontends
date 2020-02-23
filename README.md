@@ -1,4 +1,6 @@
 # @vonage/micro-frontends
+
+##About
 A simple solution for Micro Frontends orchestration.
 
 Use the MicroFrontendOrchestrator in your host application, along with the MicroFrontendComponent in the hosted components.

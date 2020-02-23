@@ -1,4 +1,3 @@
-// @ts-nocheck
 import cuid from 'cuid';
 
 jest.mock('cuid', () => jest.fn(() => 'cga123bcs'));

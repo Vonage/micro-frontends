@@ -23,6 +23,7 @@ export default class MicroFrontendComponent {
     this.registeredEvents = {};
     const injectionType = detectComponentType();
 
+    options = options || {};
     options.eventCallback = get(options, 'eventCallback', this.handleWaitingRequest.bind(this));
 
     this.component = MicroFrontendComponentFactory.create(injectionType, options);
