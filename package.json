@@ -5,6 +5,7 @@
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
   "module": "build/module/index.js",
+  "homepage": "https://github.com/Vonage/micro-frontends#readme",
   "repository": "https://github.com/Vonage/micro-frontends",
   "license": "MIT",
   "keywords": ["micro-frontends", "orchestration", "spa", "iframe", "web components"],
