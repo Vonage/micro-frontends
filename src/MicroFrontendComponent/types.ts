@@ -17,12 +17,3 @@ export enum MicroFrontEndComponentType {
   IFRAME,
   WEB_COMPONENT
 }
-
-export interface MicroFrontendComponentConstructor {
-  new (options: ConstructorOptions): IMicroFrontendComponent;
-}
-
-export interface IMicroFrontendComponent {
-  send: (eventId: string, event: string, payload: any) => void;
-}
-

@@ -1,6 +1,6 @@
 # @vonage/micro-frontends
 
-##About
+## About
 
 A simple solution for Micro Frontends orchestration.
 

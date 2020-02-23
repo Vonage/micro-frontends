@@ -1,9 +1,9 @@
 import get from 'lodash.get';
 import {
   ConstructorOptions,
-  EventHandlerFunction,
-  IMicroFrontendComponent,
+  EventHandlerFunction
 } from "../types";
+import { IMicroFrontendComponent } from "./types";
 import {CUSTOM_ELEMENT_DATA_PROPERTY} from '../../consts';
 
 export class MicroFrontendWebComponent implements IMicroFrontendComponent {
@@ -25,14 +25,14 @@ export class MicroFrontendWebComponent implements IMicroFrontendComponent {
 
     if (!this.customElement) {
       throw new Error(
-        'Mandatory option "context" is missing. The context object must be an instance of HTMLElement or a Vue compiled web-component'
+        'Mandatory option "context" is missing. The context object must be an instance of HTMLElement or a Vue compiled WebComponent'
       );
     }
 
     this.dataProperty = null;
     this.cb = get(options, 'eventCallback', () => {});
 
-    // define a custom propety on the webcomponent HTMLElement that will trigger handling of events.
+    // define a custom propety on the webcomponent HTMLElement that will trigger event handling.
     const self = this;
     Object.defineProperty(this.customElement, CUSTOM_ELEMENT_DATA_PROPERTY, {
       get: () => self.dataProperty,
@@ -40,7 +40,7 @@ export class MicroFrontendWebComponent implements IMicroFrontendComponent {
     });
   }
 
-  send(eventId, event, payload) {
+  sendEventToHost(eventId, event, payload) {
     const sentObject = { eventId, event, payload };
     this.customElement.dispatchEvent(
       new CustomEvent(event, {

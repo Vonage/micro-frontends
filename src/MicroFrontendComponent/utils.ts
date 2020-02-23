@@ -2,7 +2,7 @@ import get from 'lodash.get';
 import {MicroFrontEndComponentType, Options} from "./types";
 import {DEFAULT_REQUEST_TIMEOUT} from './consts';
 
-function isIframe(): boolean {
+function isIframeRuntime(): boolean {
   try {
     return window.self !== window.top;
   } catch (e) {
@@ -11,7 +11,7 @@ function isIframe(): boolean {
 }
 
 export function detectComponentType(): MicroFrontEndComponentType {
-  if(isIframe()) {
+  if(isIframeRuntime()) {
     return MicroFrontEndComponentType.IFRAME;
   } else {
     return MicroFrontEndComponentType.WEB_COMPONENT;

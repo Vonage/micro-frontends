@@ -1,15 +1,15 @@
-import get from 'lodash.get';
 import uuid from 'uuid';
 import {
   MicroFrontendRequest,
   Options,
   EventHandlerFunction,
-  ConstructorOptions, IMicroFrontendComponent
+  ConstructorOptions
 } from './types';
+import { IMicroFrontendComponent } from "./DOMWrappers/types";
 import { detectComponentType, extractOptions } from './utils';
-import { DEFAULT_REQUEST_TIMEOUT, NOT_INITIALIZED_ERROR } from './consts';
+import { DEFAULT_REQUEST_TIMEOUT, NOT_INITIALIZED_ERROR, NOT_SUPPORTED_TYPE_ERROR, REQUEST_TIMED_OUT_ERROR } from './consts';
 import { LIFECYCLE } from "../consts";
-import { MicroFrontendComponentFactory } from './components';
+import { MicroFrontendComponentFactory } from './DOMWrappers';
 
 export default class MicroFrontendComponent {
   private isInitialized: boolean;
@@ -24,12 +24,12 @@ export default class MicroFrontendComponent {
     const injectionType = detectComponentType();
 
     options = options || {};
-    options.eventCallback = get(options, 'eventCallback', this.handleWaitingRequest.bind(this));
+    options.eventCallback = this.handleWaitingRequest.bind(this);
 
     this.component = MicroFrontendComponentFactory.create(injectionType, options);
 
     if(!this.component) {
-      throw new Error('Failed to validate the injected component type');
+      throw new Error(NOT_SUPPORTED_TYPE_ERROR);
     }
   }
 
@@ -101,7 +101,7 @@ export default class MicroFrontendComponent {
         }
       };
       const eventId = this.registerRequest(resolveFunc, rejectFunc, requestTimeout || DEFAULT_REQUEST_TIMEOUT);
-      this.component.send(eventId, requestType, payload);
+      this.component.sendEventToHost(eventId, requestType, payload);
     });
   }
 
@@ -134,7 +134,7 @@ export default class MicroFrontendComponent {
     const self = this;
     const eventId = uuid();
     const timeout = setTimeout(() => {
-      self.handleWaitingRequest({ eventId, error: 'Request Timed Out' });
+      self.handleWaitingRequest({ eventId, error: REQUEST_TIMED_OUT_ERROR });
     }, requestTimeout);
 
     this.waitingRequests[eventId] = {

@@ -2,7 +2,11 @@ import get from 'lodash.get';
 import MicroFrontendComponent from '../../src/MicroFrontendComponent';
 import { MicroFrontEndComponentType } from '../../src/MicroFrontendComponent/types';
 import { LIFECYCLE } from "../../src/consts";
-import { DEFAULT_REQUEST_TIMEOUT, NOT_INITIALIZED_ERROR } from "../../src/MicroFrontendComponent/consts";
+import {
+  DEFAULT_REQUEST_TIMEOUT,
+  NOT_INITIALIZED_ERROR,
+  REQUEST_TIMED_OUT_ERROR
+} from "../../src/MicroFrontendComponent/consts";
 import { CUSTOM_ELEMENT_DATA_PROPERTY } from '../../src/consts';
 import { detectComponentType } from '../../src/MicroFrontendComponent/utils';
 
@@ -100,7 +104,7 @@ describe('MicroFrontendComponent Tests', () => {
         // Simulate Request Timeout
         jest.runOnlyPendingTimers();
 
-        await expect(waitingPromise).rejects.toEqual('Request Timed Out');
+        await expect(waitingPromise).rejects.toEqual(REQUEST_TIMED_OUT_ERROR);
       });
     });
 
@@ -121,7 +125,7 @@ describe('MicroFrontendComponent Tests', () => {
         // Simulate Request Timeout
         jest.runOnlyPendingTimers();
 
-        await expect(waitingPromise).rejects.toEqual('Request Timed Out');
+        await expect(waitingPromise).rejects.toEqual(REQUEST_TIMED_OUT_ERROR);
       });
     });
 
@@ -147,7 +151,7 @@ describe('MicroFrontendComponent Tests', () => {
         // Simulate Request Timeout
         jest.runOnlyPendingTimers();
 
-        await expect(waitingPromise).rejects.toEqual('Request Timed Out');
+        await expect(waitingPromise).rejects.toEqual(REQUEST_TIMED_OUT_ERROR);
       });
     });
 

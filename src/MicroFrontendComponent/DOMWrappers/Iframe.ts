@@ -1,9 +1,9 @@
 import get from 'lodash.get';
 import {
   ConstructorOptions,
-  IMicroFrontendComponent,
   EventHandlerFunction
 } from "../types";
+import { IMicroFrontendComponent } from "./types";
 import {getQueryString} from "../utils";
 
 export class MicroFrontendIframe implements IMicroFrontendComponent {
@@ -17,15 +17,15 @@ export class MicroFrontendIframe implements IMicroFrontendComponent {
     this.validateIframeParentOrigin = this.parentOrigin && get(options, 'validateIframeParentOrigin', true);
 
     this.cb = get(options, 'eventCallback', () => {});
-    window.addEventListener('message', (e: MessageEvent & { detail?: any }) => this.handleIframeParentMessage(e), false);
+    window.addEventListener('message', (e: MessageEvent & { detail?: any }) => this.handleHostEvent(e), false);
   }
 
-  send(eventId: string, event: string, payload: any) {
+  sendEventToHost(eventId: string, event: string, payload: any) {
     const sentObject = { eventId, event, payload };
     window.parent.postMessage(sentObject, this.validateIframeParentOrigin ? this.parentOrigin : '*');
   }
 
-  private handleIframeParentMessage(e: MessageEvent & { detail?: any }): void {
+  private handleHostEvent(e: MessageEvent & { detail?: any }): void {
     if (this.validateIframeParentOrigin && (!e.origin || e.origin !== this.parentOrigin)) {
       return;
     }

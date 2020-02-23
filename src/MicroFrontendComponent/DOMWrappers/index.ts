@@ -1,11 +1,7 @@
-import {
-  ConstructorOptions,
-  IMicroFrontendComponent, MicroFrontendComponentConstructor,
-  MicroFrontEndComponentType
-} from "../types";
-
-import {MicroFrontendIframe} from "./Iframe";
-import {MicroFrontendWebComponent} from './Webcomponent';
+import { ConstructorOptions, MicroFrontEndComponentType } from '../types';
+import { IMicroFrontendComponent, MicroFrontendComponentConstructor } from './types';
+import { MicroFrontendIframe } from './Iframe';
+import { MicroFrontendWebComponent } from './WebComponent';
 
 export class MicroFrontendComponentFactory {
 
