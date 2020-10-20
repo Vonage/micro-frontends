@@ -1,14 +1,12 @@
 import get from 'lodash.get';
 import MicroFrontendComponent from '../../src/MicroFrontendComponent';
-import { MicroFrontEndComponentType } from '../../src/MicroFrontendComponent/types';
-import { LIFECYCLE } from "../../src/consts";
+import { LIFECYCLE } from '../../src/consts';
 import {
   DEFAULT_REQUEST_TIMEOUT,
   NOT_INITIALIZED_ERROR,
   REQUEST_TIMED_OUT_ERROR
-} from "../../src/MicroFrontendComponent/consts";
+} from '../../src/MicroFrontendComponent/consts';
 import { CUSTOM_ELEMENT_DATA_PROPERTY } from '../../src/consts';
-import { detectComponentType } from '../../src/MicroFrontendComponent/utils';
 
 let addEventListenerSpy = null;
 const oldPostMessage = window.parent.postMessage;
@@ -18,7 +16,6 @@ const MOCK_EVENT_ID = '123';
 jest.mock('../../src/MicroFrontendComponent/utils', () => {
   return {
     getQueryString: jest.fn(() => ''),
-    detectComponentType: jest.fn(() => MicroFrontEndComponentType.IFRAME),
     extractOptions: jest.fn((options) => { return { requestTimeout: get(options, 'requestTimeout', DEFAULT_REQUEST_TIMEOUT) } })
   };
 });
@@ -181,7 +178,6 @@ describe('MicroFrontendComponent Tests', () => {
   describe('WebComponent Tests', () => {
     beforeAll(() => {
       document.body.innerHTML = '<div></div>';
-      detectComponentType.mockImplementationOnce(() => MicroFrontEndComponentType.WEB_COMPONENT);
     });
 
     test('Contructor', () => {
