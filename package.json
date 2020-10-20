@@ -1,6 +1,6 @@
 {
   "name": "@vonage/micro-frontends",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "description": "A simple solution for Micro Frontends orchestration",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
@@ -8,7 +8,13 @@
   "homepage": "https://github.com/Vonage/micro-frontends#readme",
   "repository": "https://github.com/Vonage/micro-frontends",
   "license": "MIT",
-  "keywords": ["micro-frontends", "orchestration", "spa", "iframe", "web components"],
+  "keywords": [
+    "micro-frontends",
+    "orchestration",
+    "spa",
+    "iframe",
+    "web components"
+  ],
   "author": {
     "name": "Roee Malis",
     "email": "roee.malis@vonage.com"
@@ -34,7 +40,7 @@
     "doc:publish": "gh-pages -m \\\"[ci skip] Updates\\\" -d build/docs",
     "version": "standard-version",
     "reset": "git clean -dfx && git reset --hard && npm i",
-    "clean": "trash build tests",
+    "clean": "trash build",
     "prepare-release": "run-s reset tests cov:check doc:html version doc:publish"
   },
   "scripts-info": {

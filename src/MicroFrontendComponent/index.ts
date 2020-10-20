@@ -1,15 +1,10 @@
 import uuid from 'uuid';
-import {
-  MicroFrontendRequest,
-  Options,
-  EventHandlerFunction,
-  ConstructorOptions
-} from './types';
-import { IMicroFrontendComponent } from "./DOMWrappers/types";
-import { detectComponentType, extractOptions } from './utils';
+import { LIFECYCLE } from '../consts';
 import { DEFAULT_REQUEST_TIMEOUT, NOT_INITIALIZED_ERROR, NOT_SUPPORTED_TYPE_ERROR, REQUEST_TIMED_OUT_ERROR } from './consts';
-import { LIFECYCLE } from "../consts";
 import { MicroFrontendComponentFactory } from './DOMWrappers';
+import { IMicroFrontendComponent } from './DOMWrappers/types';
+import { ConstructorOptions, EventHandlerFunction, MicroFrontEndComponentType, MicroFrontendRequest, Options } from './types';
+import { extractOptions } from './utils';
 
 export default class MicroFrontendComponent {
   private isInitialized: boolean;
@@ -21,14 +16,14 @@ export default class MicroFrontendComponent {
     this.isInitialized = false;
     this.waitingRequests = {};
     this.registeredEvents = {};
-    const injectionType = detectComponentType();
 
     options = options || {};
     options.eventCallback = this.handleWaitingRequest.bind(this);
 
+    const injectionType = options.instance ? MicroFrontEndComponentType.WEB_COMPONENT : MicroFrontEndComponentType.IFRAME;
     this.component = MicroFrontendComponentFactory.create(injectionType, options);
 
-    if(!this.component) {
+    if (!this.component) {
       throw new Error(NOT_SUPPORTED_TYPE_ERROR);
     }
   }
@@ -42,8 +37,8 @@ export default class MicroFrontendComponent {
     });
   }
 
-  public ready(options?: Options, isReady: Boolean = true): Promise<void> {
-    return this.createRequest(LIFECYCLE.READY,{
+  public ready(options?: Options, isReady: boolean = true): Promise<void> {
+    return this.createRequest(LIFECYCLE.READY, {
       ...extractOptions(options),
       enforceInitialization: true,
       payload: isReady
@@ -71,19 +66,22 @@ export default class MicroFrontendComponent {
     this.registeredEvents[eventName] = cb;
   }
 
-  public createRequest(requestType: string, {
-    payload,
-    onResolve,
-    onReject,
-    requestTimeout,
-    enforceInitialization = false
-  }: {
-    payload?: any;
-    onResolve?: (data?: any) => any;
-    onReject?: (data?: any) => any;
-    requestTimeout?: number;
-    enforceInitialization?: boolean;
-  }): Promise<any> {
+  public createRequest(
+    requestType: string,
+    {
+      payload,
+      onResolve,
+      onReject,
+      requestTimeout,
+      enforceInitialization = false
+    }: {
+      payload?: any;
+      onResolve?: (data?: any) => any;
+      onReject?: (data?: any) => any;
+      requestTimeout?: number;
+      enforceInitialization?: boolean;
+    }
+  ): Promise<any> {
     if (enforceInitialization && !this.isInitialized) {
       return Promise.reject(NOT_INITIALIZED_ERROR);
     }

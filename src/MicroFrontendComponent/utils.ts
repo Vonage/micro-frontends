@@ -1,22 +1,6 @@
 import get from 'lodash.get';
-import {MicroFrontEndComponentType, Options} from "./types";
-import {DEFAULT_REQUEST_TIMEOUT} from './consts';
-
-function isIframeRuntime(): boolean {
-  try {
-    return window.self !== window.top;
-  } catch (e) {
-    return true;
-  }
-}
-
-export function detectComponentType(): MicroFrontEndComponentType {
-  if(isIframeRuntime()) {
-    return MicroFrontEndComponentType.IFRAME;
-  } else {
-    return MicroFrontEndComponentType.WEB_COMPONENT;
-  }
-}
+import { DEFAULT_REQUEST_TIMEOUT } from './consts';
+import { Options } from './types';
 
 // We use this method instead of the URL.searchParams API to support all browsers (mainly IE11 and Edge).
 export function getQueryString(...args: any): string {
@@ -51,6 +35,6 @@ export function getQueryString(...args: any): string {
   return key === false ? res : null;
 }
 
-export function extractOptions(options: Options) {
-  return { requestTimeout: get(options, 'requestTimeout', DEFAULT_REQUEST_TIMEOUT) }
+export function extractOptions(options: Options): Options {
+  return { requestTimeout: get(options, 'requestTimeout', DEFAULT_REQUEST_TIMEOUT) };
 }

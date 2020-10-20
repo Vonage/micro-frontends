@@ -1,15 +1,10 @@
 import { ConstructorOptions, MicroFrontEndComponentType } from '../types';
-import { IMicroFrontendComponent, MicroFrontendComponentConstructor } from './types';
 import { MicroFrontendIframe } from './Iframe';
+import { IMicroFrontendComponent, MicroFrontendComponentConstructor } from './types';
 import { MicroFrontendWebComponent } from './WebComponent';
 
 export class MicroFrontendComponentFactory {
-
-  private static callCtor(ctor: MicroFrontendComponentConstructor, options: ConstructorOptions): IMicroFrontendComponent {
-    return new ctor(options);
-  }
-
-  static create(type: MicroFrontEndComponentType, options: ConstructorOptions): IMicroFrontendComponent{
+  public static create(type: MicroFrontEndComponentType, options: ConstructorOptions): IMicroFrontendComponent {
     switch (type) {
       case MicroFrontEndComponentType.IFRAME:
         return this.callCtor(MicroFrontendIframe, options);
@@ -19,5 +14,7 @@ export class MicroFrontendComponentFactory {
         return null;
     }
   }
+  private static callCtor(ctor: MicroFrontendComponentConstructor, options: ConstructorOptions): IMicroFrontendComponent {
+    return new ctor(options);
+  }
 }
-

@@ -1,13 +1,8 @@
 import uuid from 'uuid/v4';
 
+import { CUSTOM_ELEMENT_DATA_PROPERTY } from '../consts';
 import { LIFECYCLE_HOOKS } from './consts';
-import {CUSTOM_ELEMENT_DATA_PROPERTY} from '../consts';
-import {
-  generateUniqueDOMId,
-  getElementByIdWithError,
-  getOriginFromURL,
-  loadScript
-} from './dom-utils';
+import { generateUniqueDOMId, getElementByIdWithError, getOriginFromURL, loadScript } from './dom-utils';
 import { InjectionConfig } from './types';
 import { addValueToMappedArray, removeValueFromMappedArray } from './utils';
 
@@ -28,18 +23,12 @@ class MicroFrontendOrchestrator {
     this.appsIdsByRootElementId = {};
     this.appInstancesElementIdsByAppId = {};
     this.registeredEvents = {};
-    window.addEventListener(
-      'message',
-      e => this.handleIframeMessage(e),
-      false
-    );
+    window.addEventListener('message', e => this.handleIframeMessage(e), false);
   }
 
   public async inject(rootElementId: string, appId: string, options: InjectionConfig): Promise<string> {
     if (document.readyState === 'loading') {
-      throw new Error(
-        'Please wait for the DOM to be ready for interaction before injecting an app'
-      );
+      throw new Error('Please wait for the DOM to be ready for interaction before injecting an app');
     }
 
     if (!rootElementId || !appId || !options) {
@@ -47,9 +36,7 @@ class MicroFrontendOrchestrator {
     }
 
     if (!options.type || !options.url) {
-      throw new Error(
-        'inject Missing application type or url configuration'
-      );
+      throw new Error('inject Missing application type or url configuration');
     }
 
     const id = generateUniqueDOMId(appId);
@@ -102,23 +89,17 @@ class MicroFrontendOrchestrator {
 
   public async updateInjectedApplication(id: string, uiSettings: any): Promise<void> {
     if (!id) {
-      throw new Error(
-        'updateInjectedApplication: Missing application element id'
-      );
+      throw new Error('updateInjectedApplication: Missing application element id');
     }
 
     if (!uiSettings || !uiSettings.type || !uiSettings.url) {
       // Should we throw new error here or just return... ?
-      throw new Error(
-        'updateInjectedApplication: Missing application type or url configuration'
-      );
+      throw new Error('updateInjectedApplication: Missing application type or url configuration');
     }
 
     const appConfig = this.appConfigByAppId[id];
     if (!appConfig) {
-      throw new Error(
-        `updateInjectedApplication: Missing previous configuration for application with id "${id}"`
-      );
+      throw new Error(`updateInjectedApplication: Missing previous configuration for application with id "${id}"`);
     }
 
     if (uiSettings.type !== appConfig.type) {
@@ -139,11 +120,7 @@ class MicroFrontendOrchestrator {
         if (appConfig.onBeforeURLUpdate) {
           appConfig.onBeforeURLUpdate(id);
         }
-        await this.updateInjectedApplicationUrl(
-          id,
-          appConfig.rootElementId,
-          this.appConfigByAppId[id]
-        );
+        await this.updateInjectedApplicationUrl(id, appConfig.rootElementId, this.appConfigByAppId[id]);
       }
     }
   }
@@ -193,15 +170,10 @@ class MicroFrontendOrchestrator {
 
     const actualEventId = eventId || uuid();
     if (appConfig.type === 'iframe') {
-      (appElement as HTMLIFrameElement).contentWindow.postMessage(
-        { eventId: actualEventId, event, payload, error },
-        appConfig.origin
-      );
+      (appElement as HTMLIFrameElement).contentWindow.postMessage({ eventId: actualEventId, event, payload, error }, appConfig.origin);
     } else if (appConfig.type === 'webcomponent') {
       if (appElement[appConfig.customElementDataProperty] === undefined) {
-        console.error(
-          'Make sure that the selected component is initialized before you start sending data'
-        );
+        console.error('Make sure that the selected component is initialized before you start sending data');
         return;
       }
 
@@ -268,8 +240,10 @@ class MicroFrontendOrchestrator {
   }
 
   public getInstancesIds(appId: string, rootElementId?: string): string[] {
-    if(rootElementId){
-      return this.appsIdsByRootElementId[rootElementId].filter(appInstanceId => this.appInstancesElementIdsByAppId[appId].indexOf(appInstanceId) >= 0);
+    if (rootElementId) {
+      return this.appsIdsByRootElementId[rootElementId].filter(
+        appInstanceId => this.appInstancesElementIdsByAppId[appId].indexOf(appInstanceId) >= 0
+      );
     }
     return this.appInstancesElementIdsByAppId[appId] || [];
   }
@@ -289,9 +263,7 @@ class MicroFrontendOrchestrator {
     }
 
     // Find the appId corresponding the iframe that sent the event.
-    const id = Object.keys(this.appConfigByAppId).find(
-      appId => this.appConfigByAppId[appId].contentWindow === event.source
-    );
+    const id = Object.keys(this.appConfigByAppId).find(appId => this.appConfigByAppId[appId].contentWindow === event.source);
     if (!id || !this.registeredEvents[id] || !eventName) {
       return;
     }
@@ -311,9 +283,7 @@ class MicroFrontendOrchestrator {
   private hideSiblingNodes(id: string): void {
     let siblingElement;
     const rootElementId = this.appConfigByAppId[id].rootElementId;
-    const siblingsIds = this.appsIdsByRootElementId[rootElementId].filter(
-      item => item !== id
-    );
+    const siblingsIds = this.appsIdsByRootElementId[rootElementId].filter(item => item !== id);
     siblingsIds.forEach(siblingId => {
       siblingElement = document.querySelector(`#${siblingId}`);
       if (siblingElement) {
@@ -353,16 +323,10 @@ class MicroFrontendOrchestrator {
   }
 
   private async injectWebComponent({ rootElementId, id, options }): Promise<void> {
-    if (
-      !rootElementId ||
-      !id ||
-      !options.url ||
-      !options.customElementTagName
-    ) {
+    if (!rootElementId || !id || !options.url || !options.customElementTagName) {
       throw new Error('injectWebComponent invalid arguments');
     }
-    options.customElementDataProperty =
-      options.customElementDataProperty || CUSTOM_ELEMENT_DATA_PROPERTY;
+    options.customElementDataProperty = options.customElementDataProperty || CUSTOM_ELEMENT_DATA_PROPERTY;
     const rootElement = getElementByIdWithError(rootElementId);
     await loadScript(options.url);
 
@@ -378,12 +342,7 @@ class MicroFrontendOrchestrator {
           e => {
             const data = e.detail;
             if (data) {
-              options.customEvents[event](
-                id,
-                data.eventId,
-                data.eventName,
-                data.payload
-              );
+              options.customEvents[event](id, data.eventId, data.eventName, data.payload);
             } else {
               options.customEvents[event](id);
             }
@@ -396,7 +355,7 @@ class MicroFrontendOrchestrator {
     rootElement.appendChild(webComponent);
   }
 
-  private defaultLifecycleCallback(id: string, eventId: string) {
+  private defaultLifecycleCallback(id: string, eventId: string): void {
     this.send(id, eventId, null, 'ACK');
   }
 
@@ -429,9 +388,7 @@ class MicroFrontendOrchestrator {
         });
       } catch (error) {
         this.remove(id);
-        throw new Error(
-          'Failed to load application using webcomponent injection'
-        );
+        throw new Error('Failed to load application using webcomponent injection');
       }
     }
   }

@@ -1,10 +1,7 @@
 import get from 'lodash.get';
-import {
-  ConstructorOptions,
-  EventHandlerFunction
-} from "../types";
-import { IMicroFrontendComponent } from "./types";
-import {CUSTOM_ELEMENT_DATA_PROPERTY} from '../../consts';
+import { CUSTOM_ELEMENT_DATA_PROPERTY } from '../../consts';
+import { ConstructorOptions, EventHandlerFunction } from '../types';
+import { IMicroFrontendComponent } from './types';
 
 export class MicroFrontendWebComponent implements IMicroFrontendComponent {
   private readonly customElement: HTMLElement;
@@ -40,7 +37,7 @@ export class MicroFrontendWebComponent implements IMicroFrontendComponent {
     });
   }
 
-  sendEventToHost(eventId, event, payload) {
+  public sendEventToHost(eventId, event, payload): void {
     const sentObject = { eventId, event, payload };
     this.customElement.dispatchEvent(
       new CustomEvent(event, {
