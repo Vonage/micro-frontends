@@ -10,10 +10,10 @@ export type InjectionConfig = {
   onAfterInjected?: (appInstanceId: string) => {};
   onInitialized?: (appInstanceId: string, eventId: string) => {};
   onReady?: (appInstanceId: string, eventId: string, eventName: string, isReady: boolean) => {};
-  onBeforeURLUpdate?: (appInstanceId: string) => {}
+  onBeforeURLUpdate?: (appInstanceId: string) => {};
   onError?: (appInstanceId: string, eventId: string) => {};
   onTerminate?: (appInstanceId: string, eventId: string) => {};
   onBeforeRemoved?: (id: string) => {};
   onRemoved?: (id: string) => {};
   contentWindow?: Window;
-}
+};

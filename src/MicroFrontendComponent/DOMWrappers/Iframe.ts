@@ -1,10 +1,7 @@
 import get from 'lodash.get';
-import {
-  ConstructorOptions,
-  EventHandlerFunction
-} from "../types";
-import { IMicroFrontendComponent } from "./types";
-import {getQueryString} from "../utils";
+import { ConstructorOptions, EventHandlerFunction } from '../types';
+import { getQueryString } from '../utils';
+import { IMicroFrontendComponent } from './types';
 
 export class MicroFrontendIframe implements IMicroFrontendComponent {
   private readonly parentOrigin: string;
@@ -20,7 +17,7 @@ export class MicroFrontendIframe implements IMicroFrontendComponent {
     window.addEventListener('message', (e: MessageEvent & { detail?: any }) => this.handleHostEvent(e), false);
   }
 
-  sendEventToHost(eventId: string, event: string, payload: any) {
+  public sendEventToHost(eventId: string, event: string, payload: any): void {
     const sentObject = { eventId, event, payload };
     window.parent.postMessage(sentObject, this.validateIframeParentOrigin ? this.parentOrigin : '*');
   }
