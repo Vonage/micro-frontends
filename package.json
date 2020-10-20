@@ -34,7 +34,7 @@
     "doc:publish": "gh-pages -m \\\"[ci skip] Updates\\\" -d build/docs",
     "version": "standard-version",
     "reset": "git clean -dfx && git reset --hard && npm i",
-    "clean": "trash build tests",
+    "clean": "trash build",
     "prepare-release": "run-s reset tests cov:check doc:html version doc:publish"
   },
   "scripts-info": {
