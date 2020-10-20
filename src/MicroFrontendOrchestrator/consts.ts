@@ -1,4 +1,4 @@
-import { LIFECYCLE } from "../consts";
+import { LIFECYCLE } from '../consts';
 
 export const LIFECYCLE_HOOKS = {
   onError: LIFECYCLE.ERROR,
