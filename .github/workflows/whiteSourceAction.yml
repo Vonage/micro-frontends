@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [10.x]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
@@ -20,11 +20,14 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
+      - name: Extract repository name
+        run: echo "repository_name=$(echo ${{ github.repository }} | cut -d'/' -f2)" >> $GITHUB_ENV
+        shell: bash
       - name: WhiteSource CI integration
-        uses: Idancc/WhiteSource-CI-Integration@v2.6
+        uses: Vonage/oss-ci-integration@v1.0
         env:
           WHITESOURCE_PRODUCT_NAME: ${{ secrets.WHITESOURCE_PRODUCT_NAME }}
-          WHITESOURCE_PROJECT_NAME: ${{ github.event.repository.name }}
+          WHITESOURCE_PROJECT_NAME: ${{ env.repository_name }}
           WHITESOURCE_GH_PAT: ${{ secrets.WHITESOURCE_GH_PAT }}
           WHITESOURCE_CONFIG_REPO: ${{ secrets.WHITESOURCE_CONFIG_REPO }}
           WHITESOURCE_NPM_TOKEN: ${{ secrets.WHITESOURCE_NPM_TOKEN }}
